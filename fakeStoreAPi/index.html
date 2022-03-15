@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #showData {
+            display: grid;
+            grid-template-columns: repeat(3, 400px);
+            grid-template-rows: 500px;
+            gap:20px;
+        }
+
+        #box {
+            width: 400px;
+            height: 500px;
+            border: 2px solid red;
+
+        }
+
+        img {
+            width: 300px;
+            height: 200px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="showData">
+
+
+    </div>
+
+</body>
+
+</html>
+<script>
+    async function funct() {
+        try {
+            let res = await fetch('https://fakestoreapi.com/products?limit=5');
+            let data = await res.json();
+            console.log("data", data)
+            appendData(data)
+        }
+        catch (err) {
+            console.log("error:", err)
+
+
+        }
+    }
+   
+    var cartArr = JSON.parse(localStorage.getItem("cart")) ||[]
+    function appendData(data) {
+       
+
+          var showData = document.getElementById("showData");
+           data.forEach(function (el, cartArr) {
+            var box = document.createElement("div");
+            box.setAttribute("id", "box")
+            var img = document.createElement("img");
+            var id = document.createElement("p4");
+            id.innerText = el.id;
+            img.src = el.image;
+            var title = document.createElement("h4");
+            title.innerText = el.title;
+            var des = document.createElement("p");
+            des.innerText = el.description;
+            var price = document.createElement("h5");
+            price.innerText = el.price;
+            var btn = document.createElement("button")
+            btn.addEventListener("click", function(){
+             addToCart(el);
+            });
+            btn.innerText = "Add to cart"
+            var rat = document.createElement("h4");
+            rat.innerText = el.rating.rate;
+            box.append(img, title, des, price, rat,btn)
+            showData.append(box)
+        });
+  
+}
+
+function addToCart(ele){
+     
+         
+           ele.count = 1;
+           cartArr.push(ele)
+           console.log(cartArr);
+           localStorage.setItem("cart",JSON.stringify(cartArr));
+         
+           
+}
+    
+    funct()
+
+</script>
